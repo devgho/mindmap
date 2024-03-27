@@ -50,7 +50,9 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      fileList: []
+      fileList: [],
+      isReciving: false,
+      recivingTimer:null
     }
   },
   watch: {
@@ -60,10 +62,10 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     this.$bus.$on('showImport', this.handleShowImport)
     this.$bus.$on('handle_file_url', this.handleFileURL)
-    this.initMind()
+    await this.initMind()
   },
   beforeDestroy() {
     this.$bus.$off('showImport', this.handleShowImport)
@@ -87,7 +89,20 @@ export default {
         async event => {
           if (event.data.type === 'value') {
             let data1 = await markdown.transformMarkdownTo(event.data.value)
+            if(this.recivingTimer){
+              clearTimeout(this.recivingTimer);
+            }
+            this.recivingTimer = setTimeout(()=>{
+              this.$bus.$emit('setData', data1);  
+            },1500);
+            if(this.isReciving){
+              return;
+            }
             this.$bus.$emit('setData', data1)
+            this.isReciving = true;
+            setTimeout(()=>{
+              this.isReciving = false;
+            },1000);
           } else {
             console.log(event.data)
           }

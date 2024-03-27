@@ -490,7 +490,7 @@ export default {
       } else {
         this.mindMap.setData(data)
       }
-      this.mindMap.view.reset()
+      // this.mindMap.view.reset()
       this.manualSave()
     },
 
