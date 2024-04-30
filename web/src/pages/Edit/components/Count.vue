@@ -70,7 +70,6 @@ export default {
      * @Desc: 遍历
      */
     walk(data) {
-      if (!data) return
       this.num++
       this.textStr += String(data.data.text) || ''
       if (data.children && data.children.length > 0) {

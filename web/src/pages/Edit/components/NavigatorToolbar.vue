@@ -81,18 +81,6 @@
       ></div>
     </div>
     <div class="item">
-      <el-tooltip
-        effect="dark"
-        :content="$t('navigatorToolbar.changeSourceCodeEdit')"
-        placement="top"
-      >
-        <div class="btn iconfont iconyuanma" @click="openSourceCodeEdit"></div>
-      </el-tooltip>
-    </div>
-    <div class="item">
-      <Demonstrate :isDark="isDark" :mindMap="mindMap"></Demonstrate>
-    </div>
-    <div class="item">
       <el-dropdown @command="handleCommand">
         <div class="btn iconfont iconbangzhu"></div>
         <el-dropdown-menu slot="dropdown">
@@ -117,7 +105,6 @@ import i18n from '@/i18n'
 import { storeLang, getLang } from '@/api'
 import { mapState, mapMutations } from 'vuex'
 import pkg from 'simple-mind-map/package.json'
-import Demonstrate from './Demonstrate.vue'
 
 /**
  * @Author: 王林
@@ -129,8 +116,7 @@ export default {
   components: {
     Scale,
     Fullscreen,
-    MouseAction,
-    Demonstrate
+    MouseAction
   },
   props: {
     mindMap: {
@@ -155,7 +141,7 @@ export default {
     this.lang = getLang()
   },
   methods: {
-    ...mapMutations(['setLocalConfig', 'setIsReadonly', 'setIsSourceCodeEdit']),
+    ...mapMutations(['setLocalConfig', 'setIsReadonly']),
 
     readonlyChange() {
       this.setIsReadonly(!this.isReadonly)
@@ -212,10 +198,6 @@ export default {
 
     backToRoot() {
       this.mindMap.renderer.setRootNodeCenter()
-    },
-
-    openSourceCodeEdit() {
-      this.setIsSourceCodeEdit(true)
     }
   }
 }

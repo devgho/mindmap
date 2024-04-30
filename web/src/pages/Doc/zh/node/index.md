@@ -56,18 +56,6 @@
 
 ## 方法
 
-### deactivate()
-
-> 0.9.11+
-
-取消激活该节点。
-
-### getAncestorNodes()
-
-> v0.9.9+
-
-获取祖先节点实例列表。
-
 ### highlight()
 
 > v0.9.8+
@@ -263,16 +251,6 @@
 ### setNote(note)
 
 设置节点备注，`SET_NODE_NOTE`命令的快捷方法
-
-### setAttachment(url, name)
-
-> v0.9.10+
-
-- `url`：附件的url；
-
-- `name`：附件的名称，可选
-
-设置节点附件，`SET_NODE_ATTACHMENT`命令的快捷方法
 
 ### setTag(tag)
 

@@ -26,7 +26,7 @@
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
-        <div class="toolbarBtn" @click="openDirectory">
+        <!-- <div class="toolbarBtn" @click="openDirectory">
           <span class="icon iconfont icondakai"></span>
           <span class="text">{{ $t('toolbar.directory') }}</span>
         </div>
@@ -37,7 +37,7 @@
         <div class="toolbarBtn" @click="openLocalFile">
           <span class="icon iconfont iconwenjian1"></span>
           <span class="text">{{ $t('toolbar.openFile') }}</span>
-        </div>
+        </div> -->
         <div class="toolbarBtn" @click="saveLocalFile">
           <span class="icon iconfont iconlingcunwei"></span>
           <span class="text">{{ $t('toolbar.saveAs') }}</span>
@@ -178,7 +178,6 @@ export default {
         'summary',
         'associativeLine',
         'formula'
-        // 'attachment'
       ],
       horizontalList: [],
       verticalList: [],

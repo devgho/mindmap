@@ -50,7 +50,9 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      fileList: []
+      fileList: [],
+      isReciving: false,
+      recivingTimer:null
     }
   },
   watch: {
@@ -60,21 +62,53 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     this.$bus.$on('showImport', this.handleShowImport)
     this.$bus.$on('handle_file_url', this.handleFileURL)
-    this.$bus.$on('importFile', this.handleImportFile)
+    await this.initMind()
   },
   beforeDestroy() {
     this.$bus.$off('showImport', this.handleShowImport)
     this.$bus.$off('handle_file_url', this.handleFileURL)
-    this.$bus.$off('importFile', this.handleImportFile)
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
 
     handleShowImport() {
       this.dialogVisible = true
+    },
+    async initMind() {
+      if (this.$route.query.mindValue) {
+        let data = await markdown.transformMarkdownTo(
+          this.$route.query.mindValue
+        )
+        this.$bus.$emit('setData', data)
+      }
+      window.addEventListener(
+        'message',
+        async event => {
+          if (event.data.type === 'value') {
+            let data1 = await markdown.transformMarkdownTo(event.data.value)
+            if(this.recivingTimer){
+              clearTimeout(this.recivingTimer);
+            }
+            this.recivingTimer = setTimeout(()=>{
+              this.$bus.$emit('setData', data1);  
+            },1500);
+            if(this.isReciving){
+              return;
+            }
+            this.$bus.$emit('setData', data1)
+            this.isReciving = true;
+            setTimeout(()=>{
+              this.isReciving = false;
+            },1000);
+          } else {
+            console.log(event.data)
+          }
+        },
+        false
+      )
     },
 
     // 检查url中是否操作需要打开的文件
@@ -280,7 +314,140 @@ export default {
       fileReader.readAsText(file.raw)
       fileReader.onload = async evt => {
         try {
-          let data = await markdown.transformMarkdownTo(evt.target.result)
+          const text = `# 中国历史五千年脉络
+
+## 1 古代历史
+### 1.1 夏商西周时期
+#### 1.1.1 夏朝
+- 传说中的启蒙时代
+- 有关夏朝的历史文献
+#### 1.1.2 商朝
+- 商朝的兴起和发展
+- 商朝的政治制度演变
+- 商朝的经济特点
+- 商朝的文化成就
+### 1.2 春秋战国时期
+#### 1.2.1 春秋战国概述
+- 春秋时期国家分裂
+- 战国时期兵戎相见
+#### 1.2.2 孔子与儒家
+- 孔子的生平及思想
+- 儒家的核心价值观
+#### 1.2.3 秦始皇统一中国
+- 秦始皇的改革和统一行动
+- 秦始皇的法制建设
+- 秦始皇的文化政策
+### 1.3 隋唐五代时期
+#### 1.3.1 隋朝
+- 隋朝的建立与统一
+- 隋朝的政治制度
+- 隋朝的开国皇帝
+#### 1.3.2 唐朝
+- 唐朝的盛世和文化繁荣
+- 唐朝的经济发展
+- 唐朝的外交政策
+#### 1.3.3 五代十国
+- 五代十国时期的政治动荡
+- 五代十国的文化交流
+## 2 中世纪历史
+### 2.1 唐宋元明清时期
+#### 2.1.1 唐朝（618-907年）
+- 唐朝开创了盛世，实行科举制度
+- 唐朝诗歌达到高峰，杜牧、李白等诗人著名
+#### 2.1.2 宋朝（960-1279年）
+- 宋朝推行王安石变法
+- 宋朝始终受到金朝、蒙古帝国侵袭
+#### 2.1.3 元朝（1271-1368年）
+- 元世祖忽必烈灭掉南宋，建立元朝
+- 元朝实行蒙古骑兵政策，实行行省制度
+### 2.2 明清时期
+#### 2.2.1 明朝（1368-1644年）
+- 明朝实行海禁政策
+- 明朝永乐大典成书，明孝陵、故宫等建筑兴盛
+#### 2.2.2 清朝（1644-1912年）
+- 清朝入主中原，推行满汉分治政策
+- 清朝康雍乾盛世，科举制度得到完善
+### 2.3 中世纪重要事件
+#### 2.3.1 百年战争
+- 英法之间的长期战争，对两国都造成沉重损失
+- 代表人物有爱德华三世、查理六世等
+#### 2.3.2 马可·波罗东游
+- 意大利旅行家马可·波罗访问中国
+- 记载了中国的经济、文化等情况
+## 3 近代历史
+### 3.1 清朝末年
+#### 3.1.1 辛亥革命
+- 辛亥革命于1911年爆发，推翻了清朝统治。
+- 辛亥革命是中国近代史上第一次资产阶级性质的民主革命。
+#### 3.1.2 八国联军入侵
+- 1900年，八国联军侵略中国，焚烧圆明园，导致清政府签订不平等条约。
+- 八国联军入侵使清王朝进一步衰落。
+### 3.2 民国时期
+#### 3.2.1 孙中山与国民党
+- 孙中山创立中国国民党，提出三民主义，推动了辛亥革命的成功。
+- 国民党在中国近代史中扮演着重要角色。
+#### 3.2.2 蒋介石与国共内战
+- 蒋介石领导国民党，与共产党进行了长期的内战。
+- 国共内战最终以共产党胜利结束，建立了中华人民共和国。
+### 3.3 中华人民共和国成立
+#### 3.3.1 共和国建立
+- 1949年10月1日，中华人民共和国在北京宣告成立。
+- 中华人民共和国的成立标志着中国进入社会主义制度。
+#### 3.3.2 改革开放
+- 1978年，中国开始实行改革开放政策，向市场经济方向转变。
+- 改革开放使中国经济迅速发展，逐步跻身世界大国之列。
+
+# 中国历史五千年脉络
+
+## 4 当代历史
+
+### 4.1 中华人民共和国成立
+#### 4.1.1 解放战争胜利
+- 1949年10月1日，中华人民共和国正式成立。
+- 中国共产党取得解放战争的胜利。
+
+#### 4.1.2 国共内战
+- 国共内战结束，国共双方建立了不同的政权。
+- 共产党取得了最终胜利，国民党改组到台湾。
+
+### 4.2 文化大革命
+#### 4.2.1 红卫兵运动
+- 文化大革命爆发，红卫兵成为主要运动力量。
+- 学校停课，各界秩序被打破。
+
+#### 4.2.2 邓小平上台
+- 文革结束后，邓小平提出改革开放政策。
+- 文化大革命给国家带来沉重的伤痛，经济遭受严重破坏。
+
+### 4.3 对外开放
+#### 4.3.1 经济特区
+- 1978年，中国建立了深圳经济特区。
+- 经济特区逐渐发展成现代化城市。
+
+#### 4.3.2 中国加入WTO
+- 2001年中国加入世界贸易组织（WTO）。
+- 对外开放步伐加快，与国际接轨。
+
+### 4.4 台湾问题
+#### 4.4.1 一国两制
+- 大陆持续推行一国两制政策。
+- 台湾地区与大陆关系紧张，一国两制难以实现。
+
+#### 4.4.2 台海局势
+- 台海局势不断紧张，两岸关系时有波动。
+- 台湾地位问题成为国际焦点。
+
+### 4.5 北京奥运会
+#### 4.5.1 筹备过程
+- 北京成功申办2008年奥运会。
+- 环保、交通等问题备受关注。
+
+#### 4.5.2 开幕式
+- 2008年北京奥运会开幕式震撼世界。
+- 中华文化展示给世界各国观众。
+`
+          let data = await markdown.transformMarkdownTo(text)
+          // console.log(evt.target.result);
           this.$bus.$emit('setData', data)
           this.$message.success(this.$t('import.importSuccess'))
         } catch (error) {
@@ -288,16 +455,6 @@ export default {
           this.$message.error(this.$t('import.fileParsingFailed'))
         }
       }
-    },
-
-    // 导入指定文件
-    handleImportFile(file) {
-      this.onChange({
-        raw: file,
-        name: file.name
-      })
-      if (this.fileList.length <= 0) return
-      this.confirm()
     }
   }
 }

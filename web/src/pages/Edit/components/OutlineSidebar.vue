@@ -35,6 +35,7 @@ export default {
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
+      isOutlineEdit: state => state.isOutlineEdit,
       activeSidebar: state => state.activeSidebar
     })
   },

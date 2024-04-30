@@ -62,9 +62,7 @@ export default {
     isUseHandDrawnLikeStyle: '是否开启手绘风格',
     rootLineStartPos: '根节点连线起始位置',
     center: '中心',
-    right: '右侧',
-    rainbowLines: '彩虹线条',
-    notUseRainbowLines: '不使用彩虹线条'
+    right: '右侧'
   },
   color: {
     moreColor: '更多颜色'
@@ -98,8 +96,7 @@ export default {
     removeHyperlink: '移除超链接',
     removeNote: '移除备注',
     removeCustomStyles: '一键去除自定义样式',
-    removeAllNodeCustomStyles: '一键去除所有节点自定义样式',
-    exportNodeToPng: '导出该节点为图片'
+    removeAllNodeCustomStyles: '一键去除所有节点自定义样式'
   },
   count: {
     words: '字数',
@@ -129,16 +126,11 @@ export default {
     paddingX: '水平内边距',
     paddingY: '垂直内边距',
     useMultiPageExport: '是否多页导出',
-    defaultFileName: '思维导图',
-    addFooterText: '底部添加文字',
-    addFooterTextPlaceholder: '比如：来自simple-mind-map'
+    defaultFileName: '思维导图'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
     fullscreenEdit: '全屏编辑'
-  },
-  demonstrate: {
-    demonstrate: '进入演示模式'
   },
   import: {
     title: '导入',
@@ -156,8 +148,7 @@ export default {
     closeMiniMap: '关闭小地图',
     readonly: '切换为只读模式',
     edit: '切换为编辑模式',
-    backToRoot: '回到根节点',
-    changeSourceCodeEdit: '切换为源码编辑模式'
+    backToRoot: '回到根节点'
   },
   nodeHyperlink: {
     title: '超链接',
@@ -260,7 +251,6 @@ export default {
     associativeLine: '关联线',
     painter: '格式刷',
     formula: '公式',
-    attachment: '附件',
     more: '更多',
     selectFileTip: '请选择文件',
     notSupportTip: '你的浏览器不支持该功能，或者当前页面非https协议',
@@ -281,9 +271,7 @@ export default {
     splitByWrap: '是否按换行自动分割节点？',
     tip: '提示',
     yes: '是',
-    no: '否',
-    exportError: '导出失败',
-    dragTip: '在此释放以导入该文件'
+    no: '否'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
@@ -321,19 +309,5 @@ export default {
   },
   other: {
     loading: '正在加载，请稍后...'
-  },
-  sourceCodeEdit: {
-    sourceCodeTip: '富文本模式下不建议修改样式，因为需要同步修改数据及html结构。',
-    format: '格式化',
-    copy: '复制',
-    confirm: '完成',
-    close: '关闭',
-    formatErrorTip: 'JSON格式有误，请检查后再试',
-    copyTip: '已复制到剪贴板',
-    formatTip: '格式化完成'
-  },
-  attachment: {
-    deleteAttachment: '删除附件',
-    tip: '附件功能仅在客户端可用'
   }
 }

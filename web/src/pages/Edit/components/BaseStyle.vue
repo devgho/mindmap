@@ -273,50 +273,6 @@
           >
         </div>
       </div>
-      <!-- 彩虹线条 -->
-      <div class="title noTop">{{ $t('baseStyle.rainbowLines') }}</div>
-      <div class="row">
-        <div class="rowItem">
-          <el-popover
-            placement="right"
-            trigger="click"
-            v-model="rainbowLinesPopoverVisible"
-          >
-            <div class="rainbowLinesOptionsBox" :class="{ isDark: isDark }">
-              <div
-                class="optionItem"
-                v-for="item in rainbowLinesOptions"
-                :key="item.value"
-              >
-                <div
-                  class="colorsBar"
-                  v-if="item.list"
-                  @click="updateRainbowLinesConfig(item)"
-                >
-                  <span
-                    class="colorItem"
-                    v-for="color in item.list"
-                    :style="{ backgroundColor: color }"
-                  ></span>
-                </div>
-                <span v-else @click="updateRainbowLinesConfig(item)">{{
-                  $t('baseStyle.notUseRainbowLines')
-                }}</span>
-              </div>
-            </div>
-            <div slot="reference" class="curRainbowLine">
-              <div class="colorsBar" v-if="curRainbowLineColorList">
-                <span
-                  class="colorItem"
-                  v-for="color in curRainbowLineColorList"
-                  :style="{ backgroundColor: color }"
-                ></span>
-              </div>
-              <span v-else>{{ $t('baseStyle.notUseRainbowLines') }}</span>
-            </div>
-          </el-popover>
-        </div>
-      </div>
       <!-- 概要连线 -->
       <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
       <div class="row">
@@ -958,8 +914,7 @@ import {
   supportLineStyleLayoutsMap,
   supportLineRadiusLayouts,
   supportNodeUseLineStyleLayouts,
-  supportRootLineKeepSameInCurveLayouts,
-  rainbowLinesOptions
+  supportRootLineKeepSameInCurveLayouts
 } from '@/config/constant'
 
 /**
@@ -985,7 +940,6 @@ export default {
   },
   data() {
     return {
-      rainbowLinesOptions,
       lineWidthList,
       fontSizeList,
       activeTab: 'color',
@@ -1040,8 +994,6 @@ export default {
           fontSize: 1
         }
       },
-      rainbowLinesPopoverVisible: false,
-      curRainbowLineColorList: null,
       updateWatermarkTimer: null,
       enableNodeRichText: true,
       localConfigs: {
@@ -1117,7 +1069,6 @@ export default {
         this.initStyle()
         this.initConfig()
         this.initWatermark()
-        this.initRainbowLines()
         this.currentLayout = this.mindMap.getLayout()
       } else {
         this.$refs.sidebar.show = false
@@ -1229,16 +1180,6 @@ export default {
       this.watermarkConfig.textStyle = { ...config.textStyle }
     },
 
-    // 初始化彩虹线条配置
-    initRainbowLines() {
-      const config = this.mindMap.getConfig('rainbowLinesConfig') || {}
-      this.curRainbowLineColorList = config.open
-        ? this.mindMap.rainbowLines
-          ? this.mindMap.rainbowLines.getColorsList()
-          : null
-        : null
-    },
-
     /**
      * @Author: 王林
      * @Date: 2021-07-03 22:27:32
@@ -1304,29 +1245,6 @@ export default {
       }, 300)
     },
 
-    // 更新彩虹线条配置
-    updateRainbowLinesConfig(item) {
-      this.rainbowLinesPopoverVisible = false
-      this.curRainbowLineColorList = item.list || null
-      this.data.config = this.data.config || {}
-      let newConfig = null
-      if (item.list) {
-        newConfig = {
-          open: true,
-          colorsList: item.list
-        }
-      } else {
-        newConfig = {
-          open: false
-        }
-      }
-      this.data.config.rainbowLinesConfig = newConfig
-      this.mindMap.rainbowLines.updateRainLinesConfig(newConfig)
-      storeConfig({
-        config: this.data.config
-      })
-    },
-
     // 设置margin
     updateMargin(type, value) {
       this.style[type] = value
@@ -1385,8 +1303,7 @@ export default {
 
     .row {
       .rowItem {
-        .name,
-        .curRainbowLine {
+        .name {
           color: hsla(0, 0%, 100%, 0.6);
         }
       }
@@ -1446,17 +1363,6 @@ export default {
         height: 30px;
         border: 1px solid #dcdfe6;
         border-radius: 4px;
-        cursor: pointer;
-      }
-
-      .curRainbowLine {
-        height: 24px;
-        border: 1px solid #dcdfe6;
-        font-size: 12px;
-        width: 240px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         cursor: pointer;
       }
     }
@@ -1529,45 +1435,6 @@ export default {
     path {
       stroke: #000;
     }
-  }
-}
-
-.rainbowLinesOptionsBox {
-  width: 200px;
-
-  &.isDark {
-    .optionItem {
-      color: hsla(0, 0%, 100%, 0.6);
-
-      &:hover {
-        background-color: hsla(0, 0%, 100%, 0.05);
-      }
-    }
-  }
-
-  .optionItem {
-    width: 100%;
-    height: 30px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      background-color: #f5f7fa;
-    }
-  }
-}
-
-.colorsBar {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-
-  .colorItem {
-    flex: 1;
-    height: 15px;
   }
 }
 </style>

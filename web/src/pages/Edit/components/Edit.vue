@@ -1,16 +1,6 @@
 <template>
-  <div
-    class="editContainer"
-    @dragenter.stop.prevent="onDragenter"
-    @dragleave.stop.prevent
-    @dragover.stop.prevent
-    @drop.stop.prevent
-  >
-    <div
-      class="mindMapContainer"
-      id="mindMapContainer"
-      ref="mindMapContainer"
-    ></div>
+  <div class="editContainer">
+    <div class="mindMapContainer" ref="mindMapContainer"></div>
     <Count :mindMap="mindMap" v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
@@ -26,7 +16,6 @@
       v-if="mindMap"
       :mindMap="mindMap"
     ></NodeNoteContentShow>
-    <NodeAttachment v-if="mindMap" :mindMap="mindMap"></NodeAttachment>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
     <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
     <Search v-if="mindMap" :mindMap="mindMap"></Search>
@@ -35,16 +24,6 @@
     <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
     <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
     <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
-    <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
-    <div
-      class="dragMask"
-      v-if="showDragMask"
-      @dragleave.stop.prevent="onDragleave"
-      @dragover.stop.prevent
-      @drop.stop.prevent="onDrop"
-    >
-      <div class="dragTip">{{ $t('edit.dragTip') }}</div>
-    </div>
   </div>
 </template>
 
@@ -66,8 +45,6 @@ import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
-import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
-import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 手绘风格插件，该插件为付费插件，详情请查看开发文档
@@ -105,8 +82,6 @@ import handleClipboardText from '@/utils/handleClipboardText'
 import Scrollbar from './Scrollbar.vue'
 import exampleData from 'simple-mind-map/example/exampleData'
 import FormulaSidebar from './FormulaSidebar.vue'
-import SourceCodeEdit from './SourceCodeEdit.vue'
-import NodeAttachment from './NodeAttachment.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -123,8 +98,6 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
   .usePlugin(Formula)
-  .usePlugin(RainbowLines)
-  .usePlugin(Demonstrate)
 // .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
@@ -159,9 +132,7 @@ export default {
     NodeIconToolbar,
     OutlineEdit,
     Scrollbar,
-    FormulaSidebar,
-    SourceCodeEdit,
-    NodeAttachment
+    FormulaSidebar
   },
   data() {
     return {
@@ -169,8 +140,7 @@ export default {
       mindMap: null,
       mindMapData: null,
       prevImg: '',
-      storeConfigTimer: null,
-      showDragMask: false
+      storeConfigTimer: null
     }
   },
   computed: {
@@ -181,8 +151,7 @@ export default {
       useLeftKeySelectionRightKeyDrag: state =>
         state.localConfig.useLeftKeySelectionRightKeyDrag,
       isUseHandDrawnLikeStyle: state =>
-        state.localConfig.isUseHandDrawnLikeStyle,
-      extraTextOnExport: state => state.extraTextOnExport
+        state.localConfig.isUseHandDrawnLikeStyle
     })
   },
   watch: {
@@ -374,62 +343,12 @@ export default {
           console.error(err)
           switch (code) {
             case 'export_error':
-              this.$message.error(this.$t('edit.exportError'))
+              this.$message.error('导出失败')
               break
             default:
               break
           }
-        },
-        addContentToFooter: () => {
-          const text = this.extraTextOnExport.trim()
-          if (!text) return null
-          const el = document.createElement('div')
-          el.className = 'footer'
-          el.innerHTML = text
-          const cssText = `
-            .footer {
-              width: 100%;
-              height: 30px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              font-size: 12px;
-              color: #979797;
-            }
-          `
-          return {
-            el,
-            cssText,
-            height: 30
-          }
         }
-        // addContentToHeader: () => {
-        //   const el = document.createElement('div')
-        //   el.className = 'footer'
-        //   el.innerHTML = '理想青年实验室'
-        //   const cssText = `
-        //     .header {
-        //       width: 100%;
-        //       height: 50px;
-        //       background: #f5f5f5;
-        //       display: flex;
-        //       justify-content: center;
-        //       align-items: center
-        //     }
-        //   `
-        //   return {
-        //     el,
-        //     cssText,
-        //     height: 50
-        //   }
-        // },
-        // beforeShortcutRun: (key, activeNodeList) => {
-        //   console.log(key, activeNodeList)
-        //   // 阻止删除快捷键行为
-        //   if (key === 'Backspace') {
-        //     return true
-        //   }
-        // }
         // handleNodePasteImg: img => {
         //   console.log(img)
         //   return new Promise(resolve => {
@@ -516,12 +435,7 @@ export default {
         'painter_start',
         'painter_end',
         'scrollbar_change',
-        'scale',
-        'translate',
-        'node_attachmentClick',
-        'node_attachmentContextmenu',
-        'demonstrate_jump',
-        'exit_demonstrate'
+        'scale'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
@@ -576,7 +490,7 @@ export default {
       } else {
         this.mindMap.setData(data)
       }
-      this.mindMap.view.reset()
+      // this.mindMap.view.reset()
       this.manualSave()
     },
 
@@ -789,7 +703,7 @@ export default {
       if (this.mindMap.cooperate && this.$route.query.userName) {
         this.mindMap.cooperate.setProvider(null, {
           roomName: 'demo-room',
-          signalingList: ['ws://10.16.83.118:4444']
+          signalingList: ['ws://10.16.83.11:4444']
         })
         this.mindMap.cooperate.setUserInfo({
           id: Math.random(),
@@ -803,20 +717,6 @@ export default {
               : ''
         })
       }
-    },
-
-    // 拖拽文件到页面导入
-    onDragenter() {
-      this.showDragMask = true
-    },
-    onDragleave() {
-      this.showDragMask = false
-    },
-    onDrop(e) {
-      this.showDragMask = false
-      const dt = e.dataTransfer
-      const file = dt.files && dt.files[0]
-      this.$bus.$emit('importFile', file)
     }
   }
 }
@@ -829,24 +729,6 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
-
-  .dragMask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3999;
-
-    .dragTip {
-      pointer-events: none;
-      font-weight: bold;
-    }
-  }
 
   .mindMapContainer {
     position: absolute;

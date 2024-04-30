@@ -2,7 +2,6 @@
   <div
     class="contextmenuContainer listBox"
     v-if="isShow"
-    ref="contextmenuRef"
     :style="{ left: left + 'px', top: top + 'px' }"
     :class="{ isDark: isDark }"
   >
@@ -92,9 +91,6 @@
       <div class="item" @click="exec('REMOVE_CUSTOM_STYLES')">
         <span class="name">{{ $t('contextmenu.removeCustomStyles') }}</span>
       </div>
-      <div class="item" @click="exec('EXPORT_CUR_NODE_TO_PNG')">
-        <span class="name">{{ $t('contextmenu.exportNodeToPng') }}</span>
-      </div>
     </template>
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">
@@ -143,7 +139,6 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { getTextFromHtml } from 'simple-mind-map/src/utils'
 
 /**
  * @Author: 王林
@@ -226,7 +221,6 @@ export default {
     this.$bus.$on('expand_btn_click', this.hide)
     this.$bus.$on('svg_mousedown', this.onMousedown)
     this.$bus.$on('mouseup', this.onMouseup)
-    this.$bus.$on('translate', this.hide)
   },
   beforeDestroy() {
     this.$bus.$off('node_contextmenu', this.show)
@@ -235,36 +229,28 @@ export default {
     this.$bus.$off('expand_btn_click', this.hide)
     this.$bus.$off('svg_mousedown', this.onMousedown)
     this.$bus.$off('mouseup', this.onMouseup)
-    this.$bus.$off('translate', this.hide)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
 
-    // 计算右键菜单元素的显示位置
-    getShowPosition(x, y) {
-      const rect = this.$refs.contextmenuRef.getBoundingClientRect()
-      if (x + rect.width > window.innerWidth) {
-        x = x - rect.width - 20
-      }
-      if (y + rect.height > window.innerHeight) {
-        y = window.innerHeight - rect.height - 10
-      }
-      return { x, y }
-    },
-
-    // 节点右键显示
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-14 21:38:50
+     * @Desc: 节点右键显示
+     */
     show(e, node) {
       this.type = 'node'
+      this.left = e.clientX + 10
+      this.top = e.clientY + 10
       this.isShow = true
       this.node = node
-      this.$nextTick(() => {
-        const { x, y } = this.getShowPosition(e.clientX + 10, e.clientY + 10)
-        this.left = x
-        this.top = y
-      })
     },
 
-    // 鼠标按下事件
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-16 13:27:48
+     * @Desc: 鼠标按下事件
+     */
     onMousedown(e) {
       if (e.which !== 3) {
         return
@@ -274,7 +260,11 @@ export default {
       this.isMousedown = true
     },
 
-    // 鼠标松开事件
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-16 13:27:53
+     * @Desc: 鼠标松开事件
+     */
     onMouseup(e) {
       if (!this.isMousedown) {
         return
@@ -290,26 +280,35 @@ export default {
       this.show2(e)
     },
 
-    // 画布右键显示
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-15 22:54:08
+     * @Desc: 画布右键显示
+     */
     show2(e) {
       this.type = 'svg'
+      this.left = e.clientX + 10
+      this.top = e.clientY + 10
       this.isShow = true
-      this.$nextTick(() => {
-        const { x, y } = this.getShowPosition(e.clientX + 10, e.clientY + 10)
-        this.left = x
-        this.top = y
-      })
     },
 
-    // 隐藏
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-14 21:37:55
+     * @Desc: 隐藏
+     */
     hide() {
       this.isShow = false
-      this.left = -9999
-      this.top = -9999
+      this.left = 0
+      this.top = 0
       this.type = ''
     },
 
-    // 执行命令
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-14 23:27:54
+     * @Desc: 执行命令
+     */
     exec(key, disabled, ...args) {
       if (disabled) {
         return
@@ -340,15 +339,6 @@ export default {
           break
         case 'REMOVE_NOTE':
           this.node.setNote('')
-          break
-        case 'EXPORT_CUR_NODE_TO_PNG':
-          this.mindMap.export(
-            'png',
-            true,
-            getTextFromHtml(this.node.getData('text')),
-            false,
-            this.node
-          )
           break
         default:
           this.$bus.$emit('execCommand', key, ...args)

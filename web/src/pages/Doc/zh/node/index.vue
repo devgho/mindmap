@@ -31,16 +31,6 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
-<h3>deactivate()</h3>
-<blockquote>
-<p>0.9.11+</p>
-</blockquote>
-<p>取消激活该节点。</p>
-<h3>getAncestorNodes()</h3>
-<blockquote>
-<p>v0.9.9+</p>
-</blockquote>
-<p>获取祖先节点实例列表。</p>
 <h3>highlight()</h3>
 <blockquote>
 <p>v0.9.8+</p>
@@ -193,19 +183,6 @@
 <p>设置节点超链接，<code>SET_NODE_HYPERLINK</code>命令的快捷方法</p>
 <h3>setNote(note)</h3>
 <p>设置节点备注，<code>SET_NODE_NOTE</code>命令的快捷方法</p>
-<h3>setAttachment(url, name)</h3>
-<blockquote>
-<p>v0.9.10+</p>
-</blockquote>
-<ul>
-<li>
-<p><code>url</code>：附件的url；</p>
-</li>
-<li>
-<p><code>name</code>：附件的名称，可选</p>
-</li>
-</ul>
-<p>设置节点附件，<code>SET_NODE_ATTACHMENT</code>命令的快捷方法</p>
 <h3>setTag(tag)</h3>
 <p>设置节点标签，<code>SET_NODE_TAG</code>的快捷方法</p>
 <h3>hide()</h3>

@@ -31,13 +31,13 @@
 <td>el</td>
 <td>Element</td>
 <td></td>
-<td>容器元素，必传，必须为DOM元素（当容器元素在页面上的位置发生了改变，但大小没有改变的情况下必须调用<code>getElRectInfo()</code>方法更新库内部的相关信息；当大小也发生了改变后必须调用<code>resize()</code>方法，否则会造成一些功能异常）</td>
+<td>容器元素，必传，必须为DOM元素</td>
 </tr>
 <tr>
 <td>data</td>
-<td>Object 、 null</td>
-<td></td>
-<td>思维导图数据，可参考下方【数据结构】介绍。v0.9.9+支持传空对象或者null，画布会显示空白</td>
+<td>Object</td>
+<td>{}</td>
+<td>思维导图数据，可参考下方【数据结构】介绍</td>
 </tr>
 <tr>
 <td>layout</td>
@@ -561,36 +561,6 @@
 <td>null</td>
 <td>协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 }</td>
 </tr>
-<tr>
-<td>beforeShortcutRun（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行。函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）</td>
-</tr>
-<tr>
-<td>rainbowLinesConfig（v0.9.9+）</td>
-<td>Object</td>
-<td>{ open: false, colorsList: [] }</td>
-<td>彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 }</td>
-</tr>
-<tr>
-<td>addContentToHeader（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】</td>
-</tr>
-<tr>
-<td>addContentToFooter（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>基本释义同addContentToHeader，在尾部添加自定义内容</td>
-</tr>
-<tr>
-<td>demonstrateConfig（v0.9.11+）</td>
-<td>Object、null</td>
-<td>null</td>
-<td>演示插件Demonstrate的配置。不传则使用默认配置，可传递一个对象，如果只配置某个属性，可以只设置该属性，其他没有设置的同样会使用默认配置，完整配置请参考下方【演示插件配置】小节</td>
-</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -612,14 +582,10 @@
     <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 超链接地址</span>
     <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 超链接的标题</span>
     <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 备注的内容</span>
-    <span class="hljs-attr">attachmentUrl</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件url</span>
-    <span class="hljs-attr">attachmentName</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件名称</span>
     <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表</span>
-    <span class="hljs-attr">generalization</span>: [{<span class="hljs-comment">// （0.9.0以下版本不支持数组，只能设置单个概要数据）节点的概要，如果没有概要generalization设为null即可</span>
-      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 概要的文本</span>
-      <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// 节点的文本是否是富文本模式</span>
-      <span class="hljs-comment">// ...其他普通节点的字段都支持，但是不支持children</span>
-    }],
+    <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// 节点的概要，如果没有概要generalization设为null即可</span>
+      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// 概要的文本</span>
+    },
     <span class="hljs-attr">associativeLineTargets</span>: [<span class="hljs-string">&#x27;&#x27;</span>],<span class="hljs-comment">// 如果存在关联线，那么为目标节点的uid列表</span>
     <span class="hljs-attr">associativeLineText</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// 关联线文本</span>
     <span class="hljs-comment">// ...其他样式字段，可以参考主题</span>
@@ -710,83 +676,6 @@
 <td>Array</td>
 <td></td>
 <td>分组下的图标列表，数组的每一项为一个对象，<code>{ name: '', icon: '' }</code>，<code>name</code>代表图标的名称，<code>icon</code>代表图标，可以是<code>svg</code>图标，比如<code>&lt;svg ...&gt;&lt;path&gt;&lt;/path&gt;&lt;/svg&gt;</code>，也可以是图片<code>url</code>，或者是<code>base64</code>图标，比如<code>data:image/png;base64,...</code></td>
-</tr>
-</tbody>
-</table>
-<h3>导出时如何添加自定义内容</h3>
-<p><code>addContentToHeader</code>和<code>addContentToFooter</code>两个实例化选项可以用于在导出<code>png</code>、<code>svg</code>、<code>pdf</code>时在头部和尾部添加自定义的内容，默认为<code>null</code>，代表不配置，可以传递一个函数，函数可以返回<code>null</code>，代表不添加内容，如果要添加内容那么需要返回如下的结构：</p>
-<pre class="hljs"><code>{
-  el,// 要追加的自定义DOM节点，样式可内联
-  cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
-  height: 50// 返回的DOM节点的高度，必须传递
-}
-</code></pre>
-<p>一个简单的示例：</p>
-<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
-  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
-    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
-    el.innerHTML = <span class="hljs-string">&#x27;来自：simple-mind-map&#x27;</span>
-    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
-      .footer {
-        width: 100%;
-        height: 30px;
-      }
-    `</span>
-    <span class="hljs-keyword">return</span> {
-      el,
-      cssText,
-      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
-    }
-  }
-})
-</code></pre>
-<h3>演示插件配置</h3>
-<table>
-<thead>
-<tr>
-<th>字段名称</th>
-<th>类型</th>
-<th>默认值</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>boxShadowColor</td>
-<td>String</td>
-<td>rgba(0, 0, 0, 0.8)</td>
-<td>高亮框四周区域的颜色</td>
-</tr>
-<tr>
-<td>borderRadius</td>
-<td>String</td>
-<td>5px</td>
-<td>高亮框的圆角大小</td>
-</tr>
-<tr>
-<td>transition</td>
-<td>String</td>
-<td>all 0.3s ease-out</td>
-<td>高亮框动画的过渡属性，CSS的transition属性</td>
-</tr>
-<tr>
-<td>zIndex</td>
-<td>Number</td>
-<td>9999</td>
-<td>高亮框元素的层级</td>
-</tr>
-<tr>
-<td>padding</td>
-<td>Number</td>
-<td>20</td>
-<td>高亮框的内边距</td>
-</tr>
-<tr>
-<td>margin</td>
-<td>Number</td>
-<td>50</td>
-<td>高亮框的外边距</td>
 </tr>
 </tbody>
 </table>
@@ -886,13 +775,6 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <h3>themeConfig</h3>
 <p>当前主题配置。</p>
 <h2>实例方法</h2>
-<h3>getElRectInfo()</h3>
-<p>更新容器元素的位置和大小信息。当容器元素在页面中的位置发生了改变之后务必调用该方法更新信息。如果容器元素大小也发生了改变，那么请调用<code>resize</code>方法。</p>
-<h3>updateData(data)</h3>
-<blockquote>
-<p>v0.9.9+</p>
-</blockquote>
-<p>更新画布数据，如果新的数据是在当前画布节点数据基础上增删改查后形成的，那么可以使用该方法来更新画布数据。性能会更好，不会重新创建所有节点，而是会尽可能的复用。</p>
 <h3>clearDraw()</h3>
 <blockquote>
 <p>v0.8.0+</p>
@@ -903,16 +785,13 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter, node })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>：水平内边距</p>
 <p><code>paddingY</code>：垂直内边距</p>
 <p><code>ignoreWatermark</code>：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传<code>true</code>，因为绘制水印非常慢</p>
-<p><code>addContentToHeader</code>：v0.9.9+，Function，可以返回要追加到头部的自定义内容，详细介绍见【实例化选项】中的该配置</p>
-<p><code>addContentToFooter</code>：v0.9.9+，Function，可以返回要追加到尾部的自定义内容，详细介绍见【实例化选项】中的该配置</p>
-<p><code>node</code>: v0.9.11+, 节点实例，如果传了，那么仅导出该节点的内容</p>
 <p>获取<code>svg</code>数据，返回一个对象，详细结构如下：</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>
@@ -922,7 +801,6 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
   origHeight, <span class="hljs-comment">// Number，画布高度</span>
   scaleX, <span class="hljs-comment">// Number，思维导图图形的水平缩放值</span>
   scaleY, <span class="hljs-comment">// Number，思维导图图形的垂直缩放值</span>
-  clipData<span class="hljs-comment">// v0.9.11+，如果传了node，即导出指定节点的内容，那么会返回该字段，代表从完整的图片中裁剪出该节点区域的位置坐标数据</span>
 }
 </code></pre>
 <h3>render(callback)</h3>
@@ -1071,13 +949,8 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>scale</td>
-<td>画布放大缩小事件</td>
+<td>放大缩小事件</td>
 <td>scale（缩放比例）</td>
-</tr>
-<tr>
-<td>translate（v0.9.10+）</td>
-<td>画布移动事件</td>
-<td>x（水平位移）、y（垂直位移）</td>
 </tr>
 <tr>
 <td>node_img_dblclick（v0.2.15+）</td>
@@ -1142,17 +1015,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>node_icon_click（v0.6.10+）</td>
 <td>点击节点内的图标时触发</td>
-<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点，v0.9.9+)</td>
-</tr>
-<tr>
-<td>node_icon_mouseenter（v0.9.9+）</td>
-<td>鼠标移入节点内的图标时触发</td>
-<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)</td>
-</tr>
-<tr>
-<td>node_icon_mouseleave（v0.9.9+）</td>
-<td>鼠标移出节点内的图标时触发</td>
-<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)</td>
+<td>this（节点实例）、item（点击的图标名称）、e（事件对象）</td>
 </tr>
 <tr>
 <td>view_theme_change（v0.6.12+）</td>
@@ -1193,31 +1056,6 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>layout_change（v0.9.4+）</td>
 <td>修改结构时触发，即调用了mindMap.setLayout()方法时触发</td>
 <td>layout（新的结构）</td>
-</tr>
-<tr>
-<td>node_cooperate_avatar_click（v0.9.9+）</td>
-<td>协同编辑时，鼠标点击人员头像时触发</td>
-<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
-</tr>
-<tr>
-<td>node_cooperate_avatar_mouseenter（v0.9.9+）</td>
-<td>协同编辑时，鼠标移入人员头像时触发</td>
-<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
-</tr>
-<tr>
-<td>node_cooperate_avatar_mouseleave（v0.9.9+）</td>
-<td>协同编辑时，鼠标移除人员头像时触发</td>
-<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
-</tr>
-<tr>
-<td>exit_demonstrate（v0.9.11+）</td>
-<td>退出演示模式时触发</td>
-<td></td>
-</tr>
-<tr>
-<td>demonstrate_jump（v0.9.11+）</td>
-<td>演示模式中，切换步骤时触发</td>
-<td>currentStepIndex（当前播放到的步骤索引，从0开始计数）、stepLength（总的播放步骤数量）</td>
 </tr>
 </tbody>
 </table>
@@ -1359,7 +1197,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>UNEXPAND_ALL</td>
 <td>收起所有节点</td>
-<td>isSetRootNodeCenter（v0.9.11+，默认为true，收起所有节点后是否将根节点移至中心）</td>
+<td></td>
 </tr>
 <tr>
 <td>UNEXPAND_TO_LEVEL（v0.2.8+）</td>
@@ -1397,11 +1235,6 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>node（要设置的节点）、note（备注文字）</td>
 </tr>
 <tr>
-<td>SET_NODE_ATTACHMENT（v0.9.10+）</td>
-<td>设置节点附件</td>
-<td>node（要设置的节点）、url（附件url）、name（附件名称，可选）</td>
-</tr>
-<tr>
 <td>SET_NODE_TAG</td>
 <td>设置节点标签</td>
 <td>node（要设置的节点）、tag（字符串数组，内置颜色信息可在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js">constant.js</a>里获取到）</td>
@@ -1424,7 +1257,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>ADD_GENERALIZATION（v0.2.0+）</td>
 <td>添加节点概要</td>
-<td>data（概要的数据，对象格式，节点的数字段都支持，默认为{text: '概要'}）、openEdit（v0.9.11+，默认为true，是否默认进入文本编辑状态）</td>
+<td>data（概要的数据，对象格式，节点的数字段都支持，默认为{text: '概要'}）</td>
 </tr>
 <tr>
 <td>REMOVE_GENERALIZATION（v0.2.0+）</td>
@@ -1495,7 +1328,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </table>
 <h3>setData(data)</h3>
 <p>动态设置思维导图数据，纯节点数据</p>
-<p><code>data</code>：思维导图结构数据。v0.9.9+支持传空对象或者null，画布会显示空白。</p>
+<p><code>data</code>：思维导图结构数据</p>
 <h3>setFullData(<em>data</em>)</h3>
 <blockquote>
 <p>v0.2.7+</p>

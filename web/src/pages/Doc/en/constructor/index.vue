@@ -32,14 +32,14 @@
 <td>el</td>
 <td>Element</td>
 <td></td>
-<td>Container element, must be a DOM element（When the position of container elements on the page has changed but the size has not changed, the 'getElRectInfo()' method must be called to update the relevant information inside the library; When the size also changes, the 'resize()' method must be called, otherwise it will cause some functional exceptions）</td>
+<td>Container element, must be a DOM element</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>data</td>
-<td>Object 、null</td>
-<td></td>
-<td>Mind map data, Please refer to the introduction of 【Data structure】 below. V0.9.9+supports passing empty objects or null, and the canvas will display blank space</td>
+<td>Object</td>
+<td>{}</td>
+<td>Mind map data, Please refer to the introduction of 【Data structure】 below</td>
 <td></td>
 </tr>
 <tr>
@@ -658,41 +658,6 @@
 <td>During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 }</td>
 <td></td>
 </tr>
-<tr>
-<td>beforeShortcutRun（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes）</td>
-<td></td>
-</tr>
-<tr>
-<td>rainbowLinesConfig（v0.9.9+）</td>
-<td>Object</td>
-<td>{ open: false, colorsList: [] }</td>
-<td>Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 }</td>
-<td></td>
-</tr>
-<tr>
-<td>addContentToHeader（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below</td>
-<td></td>
-</tr>
-<tr>
-<td>addContentToFooter（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>The basic definition is the same as addContentToHeader, adding custom content at the end</td>
-<td></td>
-</tr>
-<tr>
-<td>demonstrateConfig（v0.9.11+）</td>
-<td>Object、null</td>
-<td>null</td>
-<td>Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below</td>
-<td></td>
-</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -715,11 +680,9 @@
     <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Title of hyperlink</span>
     <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Content of remarks</span>
     <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// Tag list</span>
-    <span class="hljs-attr">generalization</span>: [{<span class="hljs-comment">// (Arrays are not supported in versions below 0.9.0, and only a single summary data can be set)The summary of the node, if there is no summary, the generalization can be set to null</span>
-      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Summary Text</span>
-      <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// Is the text of the node in rich text mode</span>
-      <span class="hljs-comment">// ...The fields of other ordinary nodes are supported, But it does not support children</span>
-    }],
+    <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// The summary of the node, if there is no summary, the generalization can be set to null</span>
+      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// Summary Text</span>
+    },
     <span class="hljs-attr">associativeLineTargets</span>: [<span class="hljs-string">&#x27;&#x27;</span>],<span class="hljs-comment">// If there are associated lines, then it is the uid list of the target node</span>
     <span class="hljs-attr">associativeLineText</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// Association Line Text</span>
     <span class="hljs-comment">// ...For other style fields, please refer to the topic</span>
@@ -810,83 +773,6 @@
 <td>Array</td>
 <td></td>
 <td>A list of icons under grouping, with each item in the array being an object, <code>{ name: '', icon: '' }</code>，<code>name</code>represents the name of the icon, <code>icon</code>represents the icon, Can be an <code>svg</code> icon, such as <code>&lt;svg ...&gt;&lt;path&gt;&lt;/path&gt;&lt;/svg&gt;</code>, also can be a image <code>url</code>, or <code>base64</code> icon, such as <code>data:image/png;base64,...</code></td>
-</tr>
-</tbody>
-</table>
-<h3>How to add custom content when exporting</h3>
-<p>The two instantiation options <code>addContentToHeader</code> and <code>addContentToFooter</code> can be used to add custom content at the beginning and end when exporting <code>png</code>、<code>svg</code>、<code>pdf</code>, The default value is <code>null</code>, which means no configuration. A function can be passed and can return <code>null</code>, which means no content will be added. If you want to add content, you need to return the following structure:</p>
-<pre class="hljs"><code>{
-  el,// Custom DOM node to be added, styles can be inline
-  cssText,// Optional, if the style does not want to be inlined, you can pass this value as a CSS string
-  height: 50// The height of the returned DOM node must be passed
-}
-</code></pre>
-<p>A simple example:</p>
-<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
-  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
-    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
-    el.innerHTML = <span class="hljs-string">&#x27;From: simple-mind-map&#x27;</span>
-    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
-      .footer {
-        width: 100%;
-        height: 30px;
-      }
-    `</span>
-    <span class="hljs-keyword">return</span> {
-      el,
-      cssText,
-      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
-    }
-  }
-})
-</code></pre>
-<h3>Demonstration Plugin Configuration</h3>
-<table>
-<thead>
-<tr>
-<th>Field Name</th>
-<th>Type</th>
-<th>Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>boxShadowColor</td>
-<td>String</td>
-<td>rgba(0, 0, 0, 0.8)</td>
-<td>The color of the area around the highlighted box</td>
-</tr>
-<tr>
-<td>borderRadius</td>
-<td>String</td>
-<td>5px</td>
-<td>The size of the rounded corners of the highlighted box</td>
-</tr>
-<tr>
-<td>transition</td>
-<td>String</td>
-<td>all 0.3s ease-out</td>
-<td>Transition properties of highlight box animation and CSS transition properties</td>
-</tr>
-<tr>
-<td>zIndex</td>
-<td>Number</td>
-<td>9999</td>
-<td>The hierarchy of highlighted box elements</td>
-</tr>
-<tr>
-<td>padding</td>
-<td>Number</td>
-<td>20</td>
-<td>The inner margin of the highlighted box</td>
-</tr>
-<tr>
-<td>margin</td>
-<td>Number</td>
-<td>50</td>
-<td>The outer margin of the highlighted box</td>
 </tr>
 </tbody>
 </table>
@@ -986,13 +872,6 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <h3>themeConfig</h3>
 <p>Current Theme Configuration.</p>
 <h2>Instance methods</h2>
-<h3>getElRectInfo()</h3>
-<p>Update the position and size information of container elements. Be sure to call this method to update information when the position of container elements on the page changes. If the size of container elements has also changed, please call the 'resize' method.</p>
-<h3>updateData(data)</h3>
-<blockquote>
-<p>v0.9.9+</p>
-</blockquote>
-<p>Update canvas data. If the new data is formed by adding, deleting, modifying, and querying based on the current canvas node data, this method can be used to update the canvas data. The performance will be better, and not all nodes will be recreated, but rather reused as much as possible.</p>
 <h3>clearDraw()</h3>
 <blockquote>
 <p>v0.8.0+</p>
@@ -1003,16 +882,13 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter, node })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>: Padding x</p>
 <p><code>paddingY</code>: Padding y</p>
 <p><code>ignoreWatermark</code>：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow</p>
-<p><code>addContentToHeader</code>：v0.9.9+, Function, You can return the custom content to be added to the header, as detailed in the configuration in 【Instantiation options】</p>
-<p><code>addContentToFooter</code>：v0.9.9+, Function, You can return the custom content to be added to the tail, as detailed in the configuration in 【Instantiation options】</p>
-<p><code>node</code>: v0.9.11+, Node instance, if passed, only export the content of that node</p>
 <p>Get the <code>svg</code> data and return an object. The detailed structure is as follows:</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
@@ -1022,7 +898,6 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
   origHeight, <span class="hljs-comment">// Number, canvas height</span>
   scaleX, <span class="hljs-comment">// Number, horizontal zoom value of mind map graphics</span>
   scaleY, <span class="hljs-comment">// Number, vertical zoom value of mind map graphics</span>
-  clipData<span class="hljs-comment">// v0.9.11+，If node is passed, that is, the content of the specified node is exported, then this field will be returned, Represents the position coordinate data of the node region cropped from the complete image</span>
 }
 </code></pre>
 <h3>render(callback)</h3>
@@ -1178,13 +1053,8 @@ poor performance and should be used sparingly.</p>
 </tr>
 <tr>
 <td>scale</td>
-<td>Canvas zoom event</td>
+<td>Zoom event</td>
 <td>scale (zoom ratio)</td>
-</tr>
-<tr>
-<td>translate（v0.9.10+）</td>
-<td>Canvas movement event</td>
-<td>x（translate x）、y（translate y）</td>
 </tr>
 <tr>
 <td>node_img_dblclick（v0.2.15+）</td>
@@ -1249,17 +1119,7 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>node_icon_click（v0.6.10+）</td>
 <td>Triggered when clicking on an icon within a node</td>
-<td>this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node, v0.9.9+)</td>
-</tr>
-<tr>
-<td>node_icon_mouseenter（v0.9.9+）</td>
-<td>Triggered when the mouse moves into an icon within a node</td>
-<td>this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node)</td>
-</tr>
-<tr>
-<td>node_icon_mouseleave（v0.9.9+）</td>
-<td>Triggered when the mouse moves out of the icon within the node</td>
-<td>this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node)</td>
+<td>this（node instance）、item（Click on the icon name）、e（event object）</td>
 </tr>
 <tr>
 <td>view_theme_change（v0.6.12+）</td>
@@ -1300,31 +1160,6 @@ poor performance and should be used sparingly.</p>
 <td>layout_change（v0.9.4+）</td>
 <td>Triggered when modifying the structure, i.e. when the mindMap.setLayout() method is called</td>
 <td>layout（New layout）</td>
-</tr>
-<tr>
-<td>node_cooperate_avatar_click（v0.9.9+）</td>
-<td>Triggered when the mouse clicks on a person's avatar during collaborative editing</td>
-<td>userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)</td>
-</tr>
-<tr>
-<td>node_cooperate_avatar_mouseenter（v0.9.9+）</td>
-<td>Triggered when the mouse moves over a person's avatar during collaborative editing</td>
-<td>userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)</td>
-</tr>
-<tr>
-<td>node_cooperate_avatar_mouseleave（v0.9.9+）</td>
-<td>Triggered when removing personnel avatars with the mouse during collaborative editing</td>
-<td>userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)</td>
-</tr>
-<tr>
-<td>exit_demonstrate（v0.9.11+）</td>
-<td>Triggered when exiting demonstration mode</td>
-<td></td>
-</tr>
-<tr>
-<td>demonstrate_jump（v0.9.11+）</td>
-<td>Trigger when switching steps in demonstration mode</td>
-<td>currentStepIndex（The index of the steps currently played, counting from 0）、stepLength（Total number of playback steps）</td>
 </tr>
 </tbody>
 </table>
@@ -1464,7 +1299,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>UNEXPAND_ALL</td>
 <td>Collapse all nodes</td>
-<td>isSetRootNodeCenter（v0.9.11+，default is true，Will the root node be moved to the center after retracting all nodes）</td>
+<td></td>
 </tr>
 <tr>
 <td>UNEXPAND_TO_LEVEL (v0.2.8+)</td>
@@ -1502,11 +1337,6 @@ redo. All commands are as follows:</p>
 <td>node (node to set), note (note text)</td>
 </tr>
 <tr>
-<td>SET_NODE_ATTACHMENT（v0.9.10+）</td>
-<td>Set node attachment</td>
-<td>node（node to set）、url（attachment url）、name（attachment name, optional）</td>
-</tr>
-<tr>
 <td>SET_NODE_TAG</td>
 <td>Set Node Tag</td>
 <td>node (node to set), tag (string array, built-in color information can be obtained in <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js">constant.js</a>)</td>
@@ -1529,7 +1359,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>ADD_GENERALIZATION (v0.2.0+)</td>
 <td>Add a node summary</td>
-<td>data (the data for the summary, in object format, all numerical fields of the node are supported, default is <code>{text: 'summary'}</code>)、openEdit（v0.9.11+，Default is true，Whether to enter text editing status by default）</td>
+<td>data (the data for the summary, in object format, all numerical fields of the node are supported, default is <code>{text: 'summary'}</code>)</td>
 </tr>
 <tr>
 <td>REMOVE_GENERALIZATION (v0.2.0+)</td>
@@ -1600,7 +1430,7 @@ redo. All commands are as follows:</p>
 </table>
 <h3>setData(data)</h3>
 <p>Dynamic setting of mind map data, pure node data</p>
-<p><code>data</code>: mind map structure data. V0.9.9+ supports passing empty objects or null, and the canvas will display blank space.</p>
+<p><code>data</code>: mind map structure data</p>
 <h3>setFullData(<em>data</em>)</h3>
 <blockquote>
 <p>v0.2.7+</p>

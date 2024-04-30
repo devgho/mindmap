@@ -62,9 +62,7 @@ export default {
     isUseHandDrawnLikeStyle: 'Is use hand drawn like style',
     rootLineStartPos: 'Root line start pos',
     center: 'Center',
-    right: 'Right',
-    rainbowLines: 'Rainbow lines',
-    notUseRainbowLines: 'Not use rainbow lines'
+    right: 'Right'
   },
   color: {
     moreColor: 'More color'
@@ -98,8 +96,7 @@ export default {
     removeHyperlink: 'Remove hyperlink',
     removeNote: 'Remove note',
     removeCustomStyles: 'Remove custom styles',
-    removeAllNodeCustomStyles: 'Remove all node custom styles',
-    exportNodeToPng: 'Export node to png'
+    removeAllNodeCustomStyles: 'Remove all node custom styles'
   },
   count: {
     words: 'Words',
@@ -131,16 +128,11 @@ export default {
     paddingX: 'Padding x',
     paddingY: 'Padding y',
     useMultiPageExport: 'Export multi page',
-    defaultFileName: 'Mind map',
-    addFooterTextPlaceholder: 'For example: From simple-mind-map',
-    addFooterText: 'Add text at the footer'
+    defaultFileName: 'Mind map'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',
     fullscreenEdit: 'Full screen edit'
-  },
-  demonstrate: {
-    demonstrate: 'Enter demonstration mode'
   },
   import: {
     title: 'Import',
@@ -158,8 +150,7 @@ export default {
     closeMiniMap: 'Close mini map',
     readonly: 'Change to eadonly',
     edit: 'Change to edit',
-    backToRoot: 'Back to root node',
-    changeSourceCodeEdit: 'Switch to source code editing mode'
+    backToRoot: 'Back to root node'
   },
   nodeHyperlink: {
     title: 'Link',
@@ -263,7 +254,6 @@ export default {
     associativeLine: 'Associative line',
     painter: 'Painter',
     formula: 'Formula',
-    attachment: 'Attachment',
     more: 'More',
     selectFileTip: 'Please select a file',
     notSupportTip:
@@ -285,9 +275,7 @@ export default {
     splitByWrap: 'Is automatically split nodes based on line breaks?',
     tip: 'Tip',
     yes: 'Yes',
-    no: 'No',
-    exportError: 'Export failed',
-    dragTip: 'Release here to import the file'
+    no: 'No'
   },
   mouseAction: {
     tip1:
@@ -327,19 +315,5 @@ export default {
   },
   other: {
     loading: 'Loading, please wait...'
-  },
-  sourceCodeEdit: {
-    sourceCodeTip: 'It is not recommended to modify the style in rich text mode because it requires synchronous modification of data and HTML structure.',
-    format: 'Format',
-    copy: 'Copy',
-    confirm: 'Complete',
-    close: 'Close',
-    formatErrorTip: 'The JSON format is incorrect. Please check and try again',
-    copyTip: 'Copied to clipboard',
-    formatTip: 'Format complete'
-  },
-  attachment: {
-    deleteAttachment: 'Delete attachment',
-    tip: 'The attachment function is only available on the client side'
   }
 }

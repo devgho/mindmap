@@ -25,40 +25,33 @@
 
 ```js
 {
-  data: {
-    text: '', // 节点的文本，可以是富文本，也就是html格式的，此时richText要设为true
-    richText: false, // 节点的文本是否是富文本模式
-    expand: true, // 节点是否展开
-    uid: '',// 节点唯一的id，可不传，内部会生成
-    icon: [], // 图标，格式可参考教程里的【插入和扩展节点图标】章节
-    image: '', // 图片的url
-    imageTitle: '', // 图片的标题，可为空
-    imageSize: { // 图片的尺寸
-      width: 100, // 图片的宽度，必传
-      height: 100, // 图片的高度，必传
-      custom: false // 如果设为true，图片的显示大小不受主题控制，以imageSize.width和imageSize.height为准
+    data: {
+        // 节点文本
+        text: '根节点',
+        // 图片
+        image: 'xxx.jpg',
+        imageTitle: '图片名称',
+        imageSize: {
+            width: 1152,
+            height: 1152
+        },
+        // 图标
+        icon: ['priority_1'],
+        // 标签
+        tag: ['标签1', '标签2'],
+        // 链接
+        hyperlink: 'http://lxqnsys.com/',
+        hyperlinkTitle: '理想青年实验室',
+        // 备注内容
+        note: '理想青年实验室\n一个有意思的角落',
+        // 概要
+        generalization: {
+            text: '概要的内容'
+        },
+        // 节点是否展开
+        expand: true,
     },
-    hyperlink: '', // 超链接地址
-    hyperlinkTitle: '', // 超链接的标题
-    note: '', // 备注的内容
-    attachmentUrl: '',// v0.9.10+，附件url
-    attachmentName: '',// v0.9.10+，附件名称
-    tag: [], // 标签列表
-    generalization: [{// （0.9.0以下版本不支持数组，只能设置单个概要数据）节点的概要，如果没有概要generalization设为null即可
-      text: '', // 概要的文本
-      richText: false, // 节点的文本是否是富文本模式
-      // ...其他普通节点的字段都支持，但是不支持children
-    }],
-    associativeLineTargets: [''],// 如果存在关联线，那么为目标节点的uid列表
-    associativeLineText: '',// 关联线文本
-    // ...其他样式字段，可以参考主题
-  },
-  children [// 子节点，结构和根节点一致
-    {
-      data: {},
-      children: []
-    }
-  ]
+    children: []// 子节点
 }
 ```
 
