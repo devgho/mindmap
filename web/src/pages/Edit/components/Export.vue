@@ -160,14 +160,13 @@ export default {
       //     console.log(e)
       //   }
       // }
-      if(Android?.onFileExtension){
+      if(window.Android!=undefined){
         try{
           Android.onFileExtension("."+this.exportType)
         }catch(e){
           console.log(e)
         } 
       }
-      console.log(this.exportType)
       if (this.exportType === 'svg') {
         this.$bus.$emit(
           'export',
@@ -223,7 +222,6 @@ export default {
     .downloadTypeList {
       .downloadTypeItem {
         background-color: #363b3f;
-
         .info {
           .name {
             color: hsla(0, 0%, 100%, 0.9);

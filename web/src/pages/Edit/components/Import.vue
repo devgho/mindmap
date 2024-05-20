@@ -1,22 +1,7 @@
 <template>
-  <el-dialog
-    class="nodeImportDialog"
-    :title="$t('import.title')"
-    :visible.sync="dialogVisible"
-    width="300px"
-  >
-    <el-upload
-      ref="upload"
-      action="x"
-      accept=".smm,.json,.xmind,.xlsx,.md"
-      :file-list="fileList"
-      :auto-upload="false"
-      :multiple="false"
-      :on-change="onChange"
-      :on-remove="onRemove"
-      :limit="1"
-      :on-exceed="onExceed"
-    >
+  <el-dialog class="nodeImportDialog" :title="$t('import.title')" :visible.sync="dialogVisible" width="300px">
+    <el-upload ref="upload" action="x" accept=".smm,.json,.xmind,.xlsx,.md" :file-list="fileList" :auto-upload="false"
+      :multiple="false" :on-change="onChange" :on-remove="onRemove" :limit="1" :on-exceed="onExceed">
       <el-button slot="trigger" size="small" type="primary">{{
         $t('import.selectFile')
       }}</el-button>
@@ -52,7 +37,7 @@ export default {
       dialogVisible: false,
       fileList: [],
       isReciving: false,
-      recivingTimer:null
+      recivingTimer: null
     }
   },
   watch: {
@@ -88,21 +73,31 @@ export default {
         'message',
         async event => {
           if (event.data.type === 'value') {
-            let data1 = await markdown.transformMarkdownTo(event.data.value)
-            if(this.recivingTimer){
+            let items = event.data.value.split("\n")
+            let count = 0
+            for (let i in items) {
+              if (items[i].search(/^#[^#].+/) != -1) {
+                if(count >= 1){
+                  items[i] = "";
+                }
+                count++
+              }
+            }
+            let data1 = await markdown.transformMarkdownTo(items.join("\n"))
+            if (this.recivingTimer) {
               clearTimeout(this.recivingTimer);
             }
-            this.recivingTimer = setTimeout(()=>{
-              this.$bus.$emit('setData', data1);  
-            },1500);
-            if(this.isReciving){
+            this.recivingTimer = setTimeout(() => {
+              this.$bus.$emit('setData', data1);
+            }, 1500);
+            if (this.isReciving) {
               return;
             }
             this.$bus.$emit('setData', data1)
             this.isReciving = true;
-            setTimeout(()=>{
+            setTimeout(() => {
               this.isReciving = false;
-            },1000);
+            }, 1000);
           } else {
             console.log(event.data)
           }
@@ -461,6 +456,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeImportDialog {
-}
+.nodeImportDialog {}
 </style>
